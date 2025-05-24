@@ -26,6 +26,13 @@ public:
         file.close();
     }
 
+    template<typename T>
+    file_writer& operator<<(const T& t)
+    {
+        anexa(t);
+        return *this;
+    }
+
     bool anexa(const op& operacao)
     {
         if (!file.is_open())

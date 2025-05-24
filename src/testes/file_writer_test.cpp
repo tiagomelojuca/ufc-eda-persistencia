@@ -33,12 +33,12 @@ TEST(file_writer_test, deve_ser_capaz_de_ler_arquivo)
     const char* nome_arquivo = "teste_escrita.txt";
     ufc::eda::io::file_writer fwriter(nome_arquivo);
 
-    fwriter.anexa(ufc::eda::io::op(ufc::eda::io::op::tipo::INCLUSAO, 11));
-    fwriter.anexa(ufc::eda::io::op(ufc::eda::io::op::tipo::REMOCAO, 42));
-    fwriter.anexa(ufc::eda::io::op(ufc::eda::io::op::tipo::REMOCAO, 42));
-    fwriter.anexa(ufc::eda::io::op(ufc::eda::io::op::tipo::SUCESSAO, 50, 65));
-    fwriter.anexa(ufc::eda::io::op(ufc::eda::io::op::tipo::IMPRESSAO, 65));
-    fwriter.anexa(ufc::eda::io::op(ufc::eda::io::op::tipo::IMPRESSAO, 20));
+    fwriter << ufc::eda::io::op(ufc::eda::io::op::tipo::INCLUSAO, 11)
+            << ufc::eda::io::op(ufc::eda::io::op::tipo::REMOCAO, 42)
+            << ufc::eda::io::op(ufc::eda::io::op::tipo::REMOCAO, 42)
+            << ufc::eda::io::op(ufc::eda::io::op::tipo::SUCESSAO, 50, 65)
+            << ufc::eda::io::op(ufc::eda::io::op::tipo::IMPRESSAO, 65)
+            << ufc::eda::io::op(ufc::eda::io::op::tipo::IMPRESSAO, 20);
 
     EXPECT_STREQ(le_conteudo_arquivo(nome_arquivo).c_str(), conteudo_esperado);
 }
