@@ -4,6 +4,8 @@
 
 #include "io/file_parser.h"
 
+// TODO: Criar casos de teste para outras instrucoes invalidas
+//       ex.: passando ponto flutuante, string etc.
 const char* conteudo_arquivo = R"(
 INC
 INC 
