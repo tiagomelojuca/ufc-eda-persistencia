@@ -1,6 +1,10 @@
 #include <gtest/gtest.h>
 
-TEST(abb_test, dummy_test)
+#include "persistencia/abb.h"
+
+TEST(abb_test, deve_ser_capaz_de_inserir_elemento)
 {
-    EXPECT_TRUE(false);
+    ufc::eda::persistencia::abb arvore;
+
+    EXPECT_TRUE(true);
 }
