@@ -18,7 +18,7 @@ TEST(abb_test, temporario)
     arvore.remove(4);
     arvore.remove(4);
 
-    EXPECT_STREQ(arvore.to_string().c_str(), "2 5 5 6 7 8");
+    EXPECT_STREQ(arvore.to_string(-1).c_str(), "2 5 5 6 7 8");
 
     EXPECT_EQ(arvore.sucessor(2, -1), 5);
     EXPECT_EQ(arvore.sucessor(5, -1), 6);

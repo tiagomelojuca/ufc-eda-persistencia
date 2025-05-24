@@ -35,12 +35,25 @@ public:
 
     bool anexa(const op& operacao)
     {
+        return anexa(operacao.to_string()) && anexa("\n");
+    }
+
+    bool anexa(const std::string& str)
+    {
         if (!file.is_open())
         {
             return false;
         }
 
-        file << operacao.to_string() << std::endl;
+        // Deixa o ambiente lidar com a forma adequada de quebra de linha
+        if (str == "\n" || str == "\r\n")
+        {
+            file << std::endl;
+        }
+        else
+        {
+            file << str;
+        }
 
         return true;
     }

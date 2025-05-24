@@ -10,10 +10,10 @@ namespace eda
 namespace io
 {
 
-class op
+struct op
 {
-public:
     enum class tipo { INCLUSAO, REMOCAO, SUCESSAO, IMPRESSAO };
+
     op(tipo tipoOperacao, int lparam, int rparam = -1)
         : tipoOperacao(tipoOperacao), lparam(lparam), rparam(rparam) {}
 
@@ -55,7 +55,6 @@ public:
         return str;
     }
 
-private:
     tipo tipoOperacao;
     int lparam = -1;
     int rparam = -1;

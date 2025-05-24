@@ -77,7 +77,7 @@ public:
         return _MAXINT;
     }
 
-    std::string to_string() const
+    std::string to_string(int versao) const
     {
         std::string str;
 
@@ -86,9 +86,9 @@ public:
             str += " ";
         });
 
-        if (str.size() > 0)
+        if (!str.empty())
         {
-            str[str.size() - 1] = '\0';
+            str.pop_back();
         }
 
         return str;
