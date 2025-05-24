@@ -20,6 +20,7 @@ add_executable(
     TesteUnitario
     "abb_test.cpp"
     "file_parser_test.cpp"
+    "file_writer_test.cpp"
 )
 
 target_link_libraries(TesteUnitario gtest_main)

@@ -1,9 +1,9 @@
 #ifndef FILE_PARSER_H_
 #define FILE_PARSER_H_
 
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
 
 #include "operacao.h"
 

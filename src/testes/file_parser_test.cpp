@@ -1,5 +1,4 @@
 #include <fstream>
-#include <iostream>
 
 #include <gtest/gtest.h>
 
@@ -37,12 +36,12 @@ void gera_arquivo_teste(const std::string& nome_arquivo)
 
 TEST(file_parser_test, deve_ser_capaz_de_ler_arquivo)
 {
-    const char* nome_arquivo = "teste.txt";
+    const char* nome_arquivo = "teste_leitura.txt";
     gera_arquivo_teste(nome_arquivo);
-    ufc::eda::io::file_parser parser(nome_arquivo);
-    parser.parse();
+    ufc::eda::io::file_parser fparser(nome_arquivo);
+    fparser.parse();
 
-    const std::vector<ufc::eda::io::op>& operacoesObtidas = parser.operacoes();
+    const std::vector<ufc::eda::io::op>& operacoesObtidas = fparser.operacoes();
     std::vector<ufc::eda::io::op> operacoesEsperadas = {
         ufc::eda::io::op(ufc::eda::io::op::tipo::INCLUSAO, 11),
         ufc::eda::io::op(ufc::eda::io::op::tipo::REMOCAO, 42),
