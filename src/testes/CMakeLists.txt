@@ -22,6 +22,7 @@ add_executable(
 )
 
 target_link_libraries(TesteUnitario gtest_main)
+target_include_directories(TesteUnitario PRIVATE ${FW_SOURCE_DIR})
 
 install(
     TARGETS TesteUnitario

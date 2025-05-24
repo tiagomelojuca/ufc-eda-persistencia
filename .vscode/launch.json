@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "name": "(Windows) Launch",
+        "type": "cppvsdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/out/exeobj_cmake/bin/TesteUnitario.exe",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}/out/exeobj_cmake/bin",
+        "environment": [],
+        "console": "externalTerminal"
+    }
+    ]
+}
