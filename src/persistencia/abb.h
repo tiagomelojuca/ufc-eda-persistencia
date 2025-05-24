@@ -63,6 +63,17 @@ public:
 
     int sucessor(int x, int versao) const
     {
+        const noh* n = busca_menor_igual(x);
+        if (n != nullptr)
+        {
+            n = sucessor(n);
+
+            if (n != nullptr)
+            {
+                return n->chave;
+            }
+        }
+
         return _MAXINT;
     }
 
@@ -122,6 +133,19 @@ private:
         return x;
     }
 
+    const noh* busca_menor_igual(int chave) const
+    {
+        const noh* x = raiz;
+        const noh* y = nullptr;
+        while (x != nullptr && x->chave != chave)
+        {
+            y = x;
+            x = chave < x->chave ? x->esq : x->dir;
+        }
+
+        return x != nullptr ? x : y;
+    }
+
     noh* min(noh* x) const
     {
         while (x->esq != nullptr)
@@ -132,19 +156,9 @@ private:
         return x;
     }
 
-    noh* max(noh* x) const
-    {
-        while (x->dir != nullptr)
-        {
-            x = x->dir;
-        }
-
-        return x;
-    }
-
     noh* sucessor(const noh* x) const
     {
-        if (x->dir != nullptr)
+        if (x->dir != nullptr && x->dir->chave != x->chave)
         {
             return min(x->dir);
         }
