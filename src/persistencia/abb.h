@@ -9,6 +9,7 @@
 #ifndef ABB_H_
 #define ABB_H_
 
+#include <functional>
 #include <string>
 
 #define _MAXINT 2147483647
@@ -32,14 +33,32 @@ public:
         noh* dir = nullptr;
     };
 
+    ~abb()
+    {
+        // TODO: limpar memoria
+    }
+
     bool inclui(int chave)
     {
-        return false;
+        auto z = new noh;
+        z->chave = chave;
+        inclui(z);
+
+        return true;
     }
 
     bool remove(int chave)
     {
-        return false;
+        const noh* z = busca(raiz, chave);
+        if (z == nullptr)
+        {
+            return false;
+        }
+
+        remove(z);
+        delete z;
+
+        return true;
     }
 
     int sucessor(int x, int versao) const
@@ -49,13 +68,49 @@ public:
 
     std::string to_string() const
     {
-        return "";
+        std::string str;
+
+        visita_em_ordem([&str](const noh* x) {
+            str += std::to_string(x->chave);
+            str += " ";
+        });
+
+        if (str.size() > 0)
+        {
+            str[str.size() - 1] = '\0';
+        }
+
+        return str;
+    }
+
+    // Metodos para depuracao
+    std::string _arvore_em_ascii() const
+    {
+        std::string arvore;
+        _arvore_em_ascii(arvore, raiz, "", true);
+
+        return arvore;
     }
 
 private:
     // Referencias:
     // https://www.youtube.com/watch?v=f7sIuYI5M2Y
     // https://www.youtube.com/watch?v=QA2wFn9nQU4
+
+    void visita_em_ordem(std::function<void(const noh*)> visita) const
+    {
+        visita_em_ordem(raiz, visita);
+    }
+
+    void visita_em_ordem(const noh* x, std::function<void(const noh*)> visita) const
+    {
+        if (x != nullptr)
+        {
+            visita_em_ordem(x->esq, visita);
+            visita(x);
+            visita_em_ordem(x->dir, visita);
+        }
+    }
 
     const noh* busca(const noh* x, int chave) const
     {
@@ -178,6 +233,31 @@ private:
         if (v != nullptr)
         {
             v->pai = u->pai;
+        }
+    }
+
+    void _arvore_em_ascii(std::string& out, const noh* x, const std::string& prefixo, bool ehUltimo) const
+    {
+        if (x != nullptr)
+        {
+            out += prefixo;
+            out += (ehUltimo ? "|___" : "|---");
+            out += std::to_string(x->chave);
+            out += "\n";
+
+            const std::string novoPrefixo = prefixo + (ehUltimo ? "    " : "|   ");
+            if (x->esq != nullptr || x->dir != nullptr)
+            {
+                if (x->dir != nullptr)
+                {
+                    _arvore_em_ascii(out, x->dir, novoPrefixo, x->esq == nullptr);
+                }
+
+                if (x->esq != nullptr)
+                {
+                    _arvore_em_ascii(out, x->esq, novoPrefixo, true);
+                }
+            }
         }
     }
 
