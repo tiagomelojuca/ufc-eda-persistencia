@@ -1,3 +1,11 @@
+/**
+ * @file abb.h
+ * @brief Implementação de uma estrutura de dados persistente de Árvore Binária de Busca (ABB).
+ *
+ * Esta classe fornece operações básicas de inclusão, remoção, busca de sucessor e conversão para string,
+ * mantendo versões persistentes da árvore binária de busca.
+ */
+
 #ifndef ABB_H_
 #define ABB_H_
 
