@@ -35,7 +35,9 @@ public:
 
     ~abb()
     {
-        // TODO: limpar memoria
+        visita_pos_ordem([](const noh* x) {
+            delete x;
+        });
     }
 
     bool inclui(int chave)
@@ -120,6 +122,21 @@ private:
             visita_em_ordem(x->esq, visita);
             visita(x);
             visita_em_ordem(x->dir, visita);
+        }
+    }
+
+    void visita_pos_ordem(std::function<void(const noh*)> visita) const
+    {
+        visita_pos_ordem(raiz, visita);
+    }
+
+    void visita_pos_ordem(const noh* x, std::function<void(const noh*)> visita) const
+    {
+        if (x != nullptr)
+        {
+            visita_pos_ordem(x->esq, visita);
+            visita_pos_ordem(x->dir, visita);
+            visita(x);
         }
     }
 
