@@ -9,3 +9,13 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_subdirectory(src/testes)
+
+add_executable(
+    cli
+    "${FW_SOURCE_DIR}/main.cpp"
+)
+
+install(
+    TARGETS cli
+    RUNTIME DESTINATION bin
+)
