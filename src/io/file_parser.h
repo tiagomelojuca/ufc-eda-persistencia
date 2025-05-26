@@ -47,6 +47,12 @@ public:
         return true;
     }
 
+    const std::vector<op>& operacoes() const
+    {
+        return _operacoes;
+    }
+
+private:
     op* parse_line(const std::string& linha)
     {
         if (linha.size() < 5 || linha[3] != ' ')
@@ -92,12 +98,6 @@ public:
         return nullptr;
     }
 
-    const std::vector<op>& operacoes() const
-    {
-        return _operacoes;
-    }
-
-private:
     std::ifstream file;
     std::vector<op> _operacoes;
 };
