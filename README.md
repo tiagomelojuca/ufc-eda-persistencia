@@ -20,6 +20,8 @@ O binário `cli` gerado na pasta de instalação do CMake pode ser utilizado com
   
 O arquivo de entrada especifica a rotina a ser executada, cujos resultados são impressos no arquivo de saída. O instrumentador ignora linhas em branco, linhas com instruções inválidas e linhas com número de argumentos não condizentes com a especificação (vide `SPEC.md`).
 
+> **⚠️ AVISO**
+> 
 > Não foi implementada verificação de sobrescrita para arquivos já existentes, então recomenda-se cautela para não inverter a ordem dos argumentos, pois isso geraria a sobrescrita com uma saída potencialmente vazia.
 
 ## Créditos
