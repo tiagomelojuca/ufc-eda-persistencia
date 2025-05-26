@@ -48,17 +48,17 @@ public:
 
     const std::string& caminho_executavel() const
     {
-        return arg(0);
+        return checked_arg(0);
     }
 
     const std::string& arquivo_entrada() const
     {
-        return arg(1);
+        return checked_arg(1);
     }
 
     const std::string& arquivo_saida() const
     {
-        return arg(2);
+        return checked_arg(2);
     }
 
 private:
@@ -144,7 +144,7 @@ private:
             : nome_arquivo_separado { arg, "" };
     }
 
-    const std::string& arg(size_t idx) const
+    const std::string& checked_arg(size_t idx) const
     {
         return _status == status::SUCESSO && idx < args.size()
             ? args[idx]
