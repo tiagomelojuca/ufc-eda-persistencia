@@ -24,13 +24,62 @@ namespace persistencia
 class abb
 {
 public:
-    struct noh
+    class noh
     {
-        int chave = 0;
+    public:
+        int chave() const
+        {
+            return _chave;
+        }
+        void chave(int n)
+        {
+            _chave = n;
+        }
 
-        noh* pai = nullptr;
-        noh* esq = nullptr;
-        noh* dir = nullptr;
+        const noh* pai() const
+        {
+            return _pai;
+        }
+        noh* pai()
+        {
+            return _pai;
+        }
+        void pai(noh* n)
+        {
+            _pai = n;
+        }
+
+        noh* esq()
+        {
+            return _esq;
+        }
+        noh* esq() const
+        {
+            return _esq;
+        }
+        void esq(noh* n)
+        {
+            _esq = n;
+        }
+
+        noh* dir()
+        {
+            return _dir;
+        }
+        noh* dir() const
+        {
+            return _dir;
+        }
+        void dir(noh* n)
+        {
+            _dir = n;
+        }
+
+    private:
+        int _chave = 0;
+        noh* _pai = nullptr;
+        noh* _esq = nullptr;
+        noh* _dir = nullptr;
     };
 
     ~abb()
@@ -43,7 +92,7 @@ public:
     bool inclui(int chave)
     {
         auto z = new noh;
-        z->chave = chave;
+        z->chave(chave);
         inclui(z);
 
         return true;
@@ -51,7 +100,7 @@ public:
 
     bool remove(int chave)
     {
-        const noh* z = busca(raiz, chave);
+        noh* z = busca(raiz, chave);
         if (z == nullptr)
         {
             return false;
@@ -65,14 +114,14 @@ public:
 
     int sucessor(int x, int versao) const
     {
-        const noh* n = busca_menor_igual(x);
+        noh* n = busca_menor_igual(x);
         if (n != nullptr)
         {
             n = sucessor(n);
 
             if (n != nullptr)
             {
-                return n->chave;
+                return n->chave();
             }
         }
 
@@ -84,7 +133,7 @@ public:
         std::string str;
 
         visita_em_ordem([&str](const noh* x) {
-            str += std::to_string(x->chave);
+            str += std::to_string(x->chave());
             str += " ";
         });
 
@@ -119,9 +168,9 @@ private:
     {
         if (x != nullptr)
         {
-            visita_em_ordem(x->esq, visita);
+            visita_em_ordem(x->esq(), visita);
             visita(x);
-            visita_em_ordem(x->dir, visita);
+            visita_em_ordem(x->dir(), visita);
         }
     }
 
@@ -134,30 +183,30 @@ private:
     {
         if (x != nullptr)
         {
-            visita_pos_ordem(x->esq, visita);
-            visita_pos_ordem(x->dir, visita);
+            visita_pos_ordem(x->esq(), visita);
+            visita_pos_ordem(x->dir(), visita);
             visita(x);
         }
     }
 
-    const noh* busca(const noh* x, int chave) const
+    noh* busca(noh* x, int chave) const
     {
-        while (x != nullptr && x->chave != chave)
+        while (x != nullptr && x->chave() != chave)
         {
-            x = chave < x->chave ? x->esq : x->dir;
+            x = chave < x->chave() ? x->esq() : x->dir();
         }
 
         return x;
     }
 
-    const noh* busca_menor_igual(int chave) const
+    noh* busca_menor_igual(int chave) const
     {
-        const noh* x = raiz;
-        const noh* y = nullptr;
-        while (x != nullptr && x->chave != chave)
+        noh* x = raiz;
+        noh* y = nullptr;
+        while (x != nullptr && x->chave() != chave)
         {
             y = x;
-            x = chave < x->chave ? x->esq : x->dir;
+            x = chave < x->chave() ? x->esq() : x->dir();
         }
 
         return x != nullptr ? x : y;
@@ -165,26 +214,26 @@ private:
 
     noh* min(noh* x) const
     {
-        while (x->esq != nullptr)
+        while (x->esq() != nullptr)
         {
-            x = x->esq;
+            x = x->esq();
         }
 
         return x;
     }
 
-    noh* sucessor(const noh* x) const
+    noh* sucessor(noh* x) const
     {
-        if (x->dir != nullptr && x->dir->chave != x->chave)
+        if (x->dir() != nullptr && x->dir()->chave() != x->chave())
         {
-            return min(x->dir);
+            return min(x->dir());
         }
 
-        noh* y = x->pai;
-        while (y != nullptr && x == y->dir)
+        noh* y = x->pai();
+        while (y != nullptr && x == y->dir())
         {
             x = y;
-            y = x->pai;
+            y = x->pai();
         }
 
         return y;
@@ -198,72 +247,72 @@ private:
         while (x != nullptr)
         {
             y = x;
-            x = z->chave < x->chave ? x->esq : x->dir;
+            x = z->chave() < x->chave() ? x->esq() : x->dir();
         }
 
-        z->pai = y;
+        z->pai(y);
         if (y == nullptr)
         {
             raiz = z;
         }
-        else if (z->chave < y->chave) {
-            y->esq = z;
+        else if (z->chave() < y->chave()) {
+            y->esq(z);
         }
         else {
-            y->dir = z;
+            y->dir(z);
         }
     }
 
-    void remove(const noh* z)
+    void remove(noh* z)
     {
-        if (z->esq == nullptr)
+        if (z->esq() == nullptr)
         {
-            transplanta(z, z->dir);
+            transplanta(z, z->dir());
         }
-        else if (z->dir == nullptr)
+        else if (z->dir() == nullptr)
         {
-            transplanta(z, z->esq);
+            transplanta(z, z->esq());
         }
         else
         {
             noh* y = sucessor(z);
-            transplanta(y, y->dir);
+            transplanta(y, y->dir());
 
-            y->esq = z->esq;
-            z->esq->pai = y;
-            y->dir = z->dir;
+            y->esq(z->esq());
+            z->esq()->pai(y);
+            y->dir(z->dir());
 
-            if (z->dir != nullptr)
+            if (z->dir() != nullptr)
             {
-                z->dir->pai = y;
+                z->dir()->pai(y);
             }
             transplanta(z, y);
         }
     }
 
-    void transplanta(const noh* u, noh* v)
+    void transplanta(noh* u, noh* v)
     {
         if (u == nullptr)
         {
             return;
         }
 
-        if (u->pai == nullptr)
+        if (u->pai() == nullptr)
         {
             raiz = v;
         }
-        else if (u == u->pai->esq)
+        else if (u == u->pai()->esq())
         {
-            u->pai->esq = v;
+            u->pai()->esq(v);
         }
         else
         {
-            u->pai->dir = v;
+            u->pai()->dir(v);
         }
 
         if (v != nullptr)
         {
-            v->pai = u->pai;
+            v->pai(u->pai());
         }
     }
 
@@ -273,20 +322,20 @@ private:
         {
             out += prefixo;
             out += (ehUltimo ? "|___" : "|---");
-            out += std::to_string(x->chave);
+            out += std::to_string(x->chave());
             out += "\n";
 
             const std::string novoPrefixo = prefixo + (ehUltimo ? "    " : "|   ");
-            if (x->esq != nullptr || x->dir != nullptr)
+            if (x->esq() != nullptr || x->dir() != nullptr)
             {
-                if (x->dir != nullptr)
+                if (x->dir() != nullptr)
                 {
-                    _arvore_em_ascii(out, x->dir, novoPrefixo, x->esq == nullptr);
+                    _arvore_em_ascii(out, x->dir(), novoPrefixo, x->esq() == nullptr);
                 }
 
-                if (x->esq != nullptr)
+                if (x->esq() != nullptr)
                 {
-                    _arvore_em_ascii(out, x->esq, novoPrefixo, true);
+                    _arvore_em_ascii(out, x->esq(), novoPrefixo, true);
                 }
             }
         }
