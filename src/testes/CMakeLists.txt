@@ -19,6 +19,7 @@ add_subdirectory(
 add_executable(
     TesteUnitario
     "abb_test.cpp"
+    "arg_parser_test.cpp"
     "executor_test.cpp"
     "file_parser_test.cpp"
     "file_writer_test.cpp"
