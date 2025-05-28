@@ -1,7 +1,4 @@
 .vscode/*
 !.vscode/launch.json
 out/
-teste_entrada_executor.txt
-teste_escrita.txt
-teste_leitura.txt 
-teste_saida_executor.txt
+teste_*.txt
