@@ -50,7 +50,15 @@ private:
         }
         else if (op.tipoOperacao == ufc::eda::io::op::tipo::SUCESSAO)
         {
-            fwriter << op << std::to_string(arvore.sucessor(op.lparam, op.rparam)) << "\n";
+            std::string str_sucessor = "INF";
+
+            const int sucessor = arvore.sucessor(op.lparam, op.rparam);
+            if (sucessor != ufc::eda::persistencia::abb::inf)
+            {
+                str_sucessor = std::to_string(sucessor);
+            }
+
+            fwriter << op << str_sucessor << "\n";
         }
         else if (op.tipoOperacao == ufc::eda::io::op::tipo::IMPRESSAO)
         {

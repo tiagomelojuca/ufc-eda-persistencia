@@ -25,6 +25,8 @@ namespace persistencia
 class abb
 {
 public:
+    constexpr static const int inf = _MAXINT;
+
     class noh
     {
         enum class campo { nenhum, chave, pai, filho_esq, filho_dir };
