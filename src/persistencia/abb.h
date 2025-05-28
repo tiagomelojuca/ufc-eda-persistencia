@@ -11,7 +11,6 @@
 
 #include <array>
 #include <functional>
-#include <list>
 #include <string>
 #include <unordered_map>
 
@@ -50,6 +49,8 @@ public:
         };
 
     public:
+        noh(abb* parent) : _arvore_associada(parent) {};
+
         noh* copia_compacta() const
         {
             auto noh_compactado = new noh(*this);
@@ -148,9 +149,13 @@ public:
         template <typename T>
         void modifica_campo(size_t nova_versao, campo c, T t)
         {
-            if (!adiciona_mod({ nova_versao, c, t }))
+            const mod m = { nova_versao, c, t };
+            if (!adiciona_mod(m))
             {
-                avisa_observadores(nova_versao, copia_compacta());
+                noh* novo_noh = copia_compacta();
+                novo_noh->mods[0] = m;
+
+                avisa_observadores(nova_versao, novo_noh);
             }
         }
 
@@ -203,16 +208,32 @@ public:
 
         void avisa_observadores(size_t nova_versao, noh* novo_noh)
         {
-            _esq->pai(nova_versao, novo_noh);
-            _dir->pai(nova_versao, novo_noh);
-
-            if (this == _pai->_esq)
+            if (_esq != nullptr)
             {
-                _pai->esq(nova_versao, novo_noh);
+                _esq->pai(nova_versao, novo_noh);
+            }
+            
+            if (_dir != nullptr)
+            {
+                _dir->pai(nova_versao, novo_noh);
+            }
+
+            if (_pai != nullptr)
+            {
+                if (this == _pai->_esq)
+                {
+                    _pai->esq(nova_versao, novo_noh);
+                }
+                else
+                {
+                    _pai->dir(nova_versao, novo_noh);
+                }
             }
             else
             {
-                _pai->dir(nova_versao, novo_noh);
+                // Se o pai eh nulo, o noh eh raiz
+                // Precisa avisar a arvore tambem
+                _arvore_associada->raiz(nova_versao, novo_noh);
             }
         }
 
@@ -220,6 +241,7 @@ public:
         noh* _pai = nullptr;
         noh* _esq = nullptr;
         noh* _dir = nullptr;
+        abb* _arvore_associada = nullptr;
 
         // Numa ABB, um noh em particular pode ser apontado por no maximo
         // outros 3 nohs: seu pai, seu filho esquerdo e seu filho direito
@@ -227,25 +249,98 @@ public:
         std::array<noh::mod, 6> mods;
     };
 
-    enum class campo { nenhum, raiz };
-    struct mod
+    class noh_raiz
     {
-        mod() = default;
-        mod(size_t versao, campo campo_modificado, noh* valor)
-            : versao(versao), campo_modificado(campo_modificado), valor(valor) {}
-
-        bool disponivel() const
+        enum class campo { nenhum, noh };
+        struct mod
         {
-            return campo_modificado == campo::nenhum;
+            mod() = default;
+            mod(size_t versao, campo campo_modificado, noh* valor)
+                : versao(versao), campo_modificado(campo_modificado), valor(valor) {}
+
+            bool disponivel() const
+            {
+                return campo_modificado == campo::nenhum;
+            }
+
+            size_t versao = 0;
+            campo campo_modificado = campo::nenhum;
+            noh* valor = nullptr;
+        };
+
+    public:
+        noh_raiz(abb* arvore_associada) : _arvore(arvore_associada) {}
+
+        noh_raiz* copia_compacta() const
+        {
+            auto noh_raiz_compactado = new noh_raiz(*this);
+
+            for (mod& m : noh_raiz_compactado->mods)
+            {
+                if (m.campo_modificado == campo::noh)
+                {
+                    noh_raiz_compactado->_noh = m.valor;
+                }
+
+                m = mod{};
+            }
+
+            return noh_raiz_compactado;
         }
 
-        size_t versao = 0;
-        campo campo_modificado = campo::nenhum;
-        noh* valor = nullptr;
+        noh* get_noh(size_t versao)
+        {
+            noh* _noh = nullptr;
+
+            for (const mod& m : mods)
+            {
+                if (m.campo_modificado == campo::noh && m.versao <= versao)
+                {
+                    _noh = m.valor;
+                }
+            }
+
+            return _noh;
+        }
+
+        void set_noh(size_t nova_versao, noh* n)
+        {
+            bool adicionou = false;
+            for (mod& mod_corrente : mods)
+            {
+                if (mod_corrente.disponivel())
+                {
+                    mod_corrente = { nova_versao, campo::noh, n };
+                    adicionou = true;
+                    break;
+                }
+            }
+
+            if (!adicionou)
+            {
+                auto novo_noh_raiz = copia_compacta();
+                _arvore->_registra_versao_raiz(nova_versao, novo_noh_raiz);
+                novo_noh_raiz->mods[0] = { nova_versao, campo::noh, n };
+            }
+        }
+
+    private:
+        abb* _arvore = nullptr;
+        noh* _noh = nullptr;
+
+        // A ideia dessa classe eh ser um wrapper para a raiz, um "noh de noh".
+        // Apenas a propria arvore aponta para ele, logo, p = 1 => 2p = 2 mods
+        std::array<noh_raiz::mod, 2> mods;
     };
+
+    abb()
+    {
+        _registra_versao_raiz(0, new noh_raiz(this));
+    }
 
     ~abb()
     {
+        // ToDo: limpeza dos nohs
     }
 
     size_t ultima_versao() const
@@ -256,7 +351,7 @@ public:
     bool inclui(int chave)
     {
         const size_t novaVersao = ++_versao;
-        auto z = new noh;
+        auto z = new noh(this);
         z->chave(novaVersao, chave);
         inclui(novaVersao, z);
 
@@ -313,6 +408,11 @@ public:
         }
 
         return str;
+    }
+
+    void _registra_versao_raiz(size_t nova_versao, noh_raiz* nova_raiz)
+    {
+        raizes_nas_versoes.push_back({ nova_versao, nova_raiz });
     }
 
 private:
@@ -464,60 +564,34 @@ private:
 
     noh* raiz(size_t versao) const
     {
-        if (versao > _versao)
+        return get_noh_raiz(versao)->get_noh(versao);
+    }
+    noh_raiz* get_noh_raiz(size_t versao) const
+    {
+        for (auto i = static_cast<int>(raizes_nas_versoes.size()) - 1; i >= 0; i--)
         {
-            versao = _versao;
-        }
-
-        noh* raiz_na_versao = _raiz;
-        auto it = raizesNasVersoes.find(versao);
-        if (it != raizesNasVersoes.end())
-        {
-            raiz_na_versao = it->second;
-        }
-
-        for (const mod& m : mods)
-        {
-            if (m.campo_modificado == campo::raiz && m.versao <= versao)
+            const auto raiz_na_versao = raizes_nas_versoes[i];
+            if (versao >= raiz_na_versao.versao)
             {
-                raiz_na_versao = m.valor;
+                return raiz_na_versao.raiz;
             }
         }
 
-        return raiz_na_versao;
+        return nullptr;
     }
     void raiz(size_t nova_versao, noh* n)
     {
-        noh* raiz_na_nova_versao = raiz(nova_versao);
-
-        bool adicionou = false;
-        for (mod& mod_corrente : mods)
-        {
-            if (mod_corrente.disponivel())
-            {
-                mod_corrente = { nova_versao, campo::raiz, n };
-                adicionou = true;
-                break;
-            }
-        }
-
-        if (!adicionou)
-        {
-            // raizesNasVersoes[]
-        }
-
-        raizesNasVersoes[nova_versao] = raiz_na_nova_versao;
+        get_noh_raiz(nova_versao)->set_noh(nova_versao, n);
     }
 
-    noh* _raiz = nullptr;
-
-    // O noh raiz de uma ABB pode ser apontado por no maximo
-    // outros 2 nohs: seu filho esquerdo e seu filho direito
-    // Logo, p = 2. Guardamos 2p mods = 4 mods
-    std::array<abb::mod, 4> mods;
+    struct par_versao_raiz
+    {
+        size_t versao;
+        noh_raiz* raiz;
+    };
 
     size_t _versao = 0;
-    std::unordered_map<size_t, noh*> raizesNasVersoes;
+    std::vector<par_versao_raiz> raizes_nas_versoes;
 };
 
 }

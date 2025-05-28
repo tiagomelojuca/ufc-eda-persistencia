@@ -41,17 +41,17 @@ TEST(abb_test, deve_ser_capaz_de_imprimir_qualquer_versao)
         EXPECT_STREQ(arvore->to_string(arvore->ultima_versao() + 1).c_str(), "2 5 5 6 7 8");
     }
     {
-        // Deve duplicar a raiz se as modificacoes diretas excederem 2p = 4
+        // Deve duplicar a raiz se as modificacoes diretas nela excederem 2p = 4
         ufc::eda::persistencia::abb arvore;
         arvore.inclui(5); // gera v1
         arvore.remove(5); // gera v2
         arvore.inclui(5); // gera v3
         arvore.remove(5); // gera v4
-        arvore.inclui(5); // gera v5
-        arvore.remove(5); // gera v6
-        arvore.inclui(6); // gera v7
+        arvore.inclui(6); // gera v5
+        arvore.remove(6); // gera v6
+        arvore.inclui(7); // gera v7
 
-        EXPECT_STREQ(arvore.to_string(7).c_str(), "6");
+        EXPECT_STREQ(arvore.to_string(7).c_str(), "7");
     }
     {
         // Se o noh raiz for duplicado indiretamente, a arvore deve ser avisada
@@ -63,7 +63,7 @@ TEST(abb_test, deve_ser_capaz_de_imprimir_qualquer_versao)
         arvore.remove(6); // gera v5
         arvore.inclui(7); // gera v6
 
-        EXPECT_STREQ(arvore.to_string(6).c_str(), "7");
+        EXPECT_STREQ(arvore.to_string(6).c_str(), "5 7");
     }
 }
 
