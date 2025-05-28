@@ -90,7 +90,7 @@ public:
             modifica_campo(nova_versao, campo::chave, n);
         }
 
-        noh* pai(size_t versao)
+        noh* pai(size_t versao) const
         {
             return acessa_campo_ponteiro(campo::pai, versao);
         }
@@ -99,7 +99,7 @@ public:
             modifica_campo(nova_versao, campo::pai, n);
         }
 
-        noh* esq(size_t versao)
+        noh* esq(size_t versao) const
         {
             return acessa_campo_ponteiro(campo::filho_esq, versao);
         }
@@ -108,7 +108,7 @@ public:
             modifica_campo(nova_versao, campo::filho_esq, n);
         }
 
-        noh* dir(size_t versao)
+        noh* dir(size_t versao) const
         {
             return acessa_campo_ponteiro(campo::filho_dir, versao);
         }
@@ -394,6 +394,20 @@ public:
         }
 
         return _MAXINT;
+    }
+
+    int profundidade(size_t versao, const noh& n) const
+    {
+        const noh* x = &n;
+
+        int prof = 0;
+        while (x->pai(versao))
+        {
+            x = x->pai(versao);
+            prof++;
+        }
+
+        return prof;
     }
 
     void visita_em_ordem(size_t versao, std::function<void(const noh&)> visita) const

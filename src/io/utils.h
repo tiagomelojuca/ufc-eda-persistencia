@@ -18,8 +18,10 @@ namespace io
         {
             std::string str;
 
-            arvore.visita_em_ordem(versao, [versao, &str](const ufc::eda::persistencia::abb::noh& x) {
+            arvore.visita_em_ordem(versao, [versao, &arvore, &str](const ufc::eda::persistencia::abb::noh& x) {
                 str += std::to_string(x.chave(versao));
+                str += ",";
+                str += std::to_string(arvore.profundidade(versao, x));
                 str += " ";
             });
 
