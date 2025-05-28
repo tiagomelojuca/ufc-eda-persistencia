@@ -6,6 +6,7 @@
 
 #include "io/file_writer.h"
 #include "io/operacao.h"
+#include "io/utils.h"
 #include "persistencia/abb.h"
 
 namespace ufc
@@ -53,7 +54,7 @@ private:
         }
         else if (op.tipoOperacao == ufc::eda::io::op::tipo::IMPRESSAO)
         {
-            fwriter << op << arvore.to_string(op.lparam) << "\n";
+            fwriter << op << ufc::eda::io::utils::to_string(arvore, op.lparam) << "\n";
         }
     }
 

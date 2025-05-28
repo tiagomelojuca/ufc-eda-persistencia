@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 
+#include "io/utils.h"
 #include "persistencia/abb.h"
 
 ufc::eda::persistencia::abb* monta_arvore_videoaula()
@@ -28,17 +29,17 @@ TEST(abb_test, deve_ser_capaz_de_imprimir_qualquer_versao)
         std::unique_ptr<ufc::eda::persistencia::abb> arvore { monta_arvore_videoaula() };
 
         EXPECT_EQ(arvore->ultima_versao(), 10u);
-        EXPECT_STREQ(arvore->to_string( 1).c_str(), "6");
-        EXPECT_STREQ(arvore->to_string( 2).c_str(), "5 6");
-        EXPECT_STREQ(arvore->to_string( 3).c_str(), "5 6 7");
-        EXPECT_STREQ(arvore->to_string( 4).c_str(), "5 6 7 8");
-        EXPECT_STREQ(arvore->to_string( 5).c_str(), "5 5 6 7 8");
-        EXPECT_STREQ(arvore->to_string( 6).c_str(), "2 5 5 6 7 8");
-        EXPECT_STREQ(arvore->to_string( 7).c_str(), "2 4 5 5 6 7 8");
-        EXPECT_STREQ(arvore->to_string( 8).c_str(), "2 4 4 5 5 6 7 8");
-        EXPECT_STREQ(arvore->to_string( 9).c_str(), "2 4 5 5 6 7 8");
-        EXPECT_STREQ(arvore->to_string(10).c_str(), "2 5 5 6 7 8");
-        EXPECT_STREQ(arvore->to_string(arvore->ultima_versao() + 1).c_str(), "2 5 5 6 7 8");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  1).c_str(), "6");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  2).c_str(), "5 6");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  3).c_str(), "5 6 7");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  4).c_str(), "5 6 7 8");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  5).c_str(), "5 5 6 7 8");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  6).c_str(), "2 5 5 6 7 8");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  7).c_str(), "2 4 5 5 6 7 8");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  8).c_str(), "2 4 4 5 5 6 7 8");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore,  9).c_str(), "2 4 5 5 6 7 8");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore, 10).c_str(), "2 5 5 6 7 8");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(*arvore, arvore->ultima_versao() + 1).c_str(), "2 5 5 6 7 8");
     }
     {
         // Deve duplicar a raiz se as modificacoes diretas nela excederem 2p = 4
@@ -51,7 +52,7 @@ TEST(abb_test, deve_ser_capaz_de_imprimir_qualquer_versao)
         arvore.remove(6); // gera v6
         arvore.inclui(7); // gera v7
 
-        EXPECT_STREQ(arvore.to_string(7).c_str(), "7");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(arvore, 7).c_str(), "7");
     }
     {
         // Se o noh raiz for duplicado indiretamente, a arvore deve ser avisada
@@ -63,7 +64,7 @@ TEST(abb_test, deve_ser_capaz_de_imprimir_qualquer_versao)
         arvore.remove(6); // gera v5
         arvore.inclui(7); // gera v6
 
-        EXPECT_STREQ(arvore.to_string(6).c_str(), "5 7");
+        EXPECT_STREQ(ufc::eda::io::utils::to_string(arvore, 6).c_str(), "5 7");
     }
 }
 

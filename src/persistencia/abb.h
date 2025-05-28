@@ -12,7 +12,6 @@
 #include <array>
 #include <functional>
 #include <list>
-#include <string>
 
 #define _MAXINT 2147483647
 
@@ -396,21 +395,9 @@ public:
         return _MAXINT;
     }
 
-    std::string to_string(size_t versao) const
+    void visita_em_ordem(size_t versao, std::function<void(const noh&)> visita) const
     {
-        std::string str;
-
-        visita_em_ordem(versao, [versao, &str](const noh* x) {
-            str += std::to_string(x->chave(versao));
-            str += " ";
-        });
-
-        if (!str.empty())
-        {
-            str.pop_back();
-        }
-
-        return str;
+        visita_em_ordem(versao, raiz(versao), visita);
     }
 
     void _registra_noh(noh* n)
@@ -427,17 +414,12 @@ private:
     // https://www.youtube.com/watch?v=f7sIuYI5M2Y
     // https://www.youtube.com/watch?v=QA2wFn9nQU4
 
-    void visita_em_ordem(size_t versao, std::function<void(noh*)> visita) const
-    {
-        visita_em_ordem(versao, raiz(versao), visita);
-    }
-
-    void visita_em_ordem(size_t versao, noh* x, std::function<void(noh*)> visita) const
+    void visita_em_ordem(size_t versao, noh* x, std::function<void(const noh&)> visita) const
     {
         if (x != nullptr)
         {
             visita_em_ordem(versao, x->esq(versao), visita);
-            visita(x);
+            visita(*x);
             visita_em_ordem(versao, x->dir(versao), visita);
         }
     }
