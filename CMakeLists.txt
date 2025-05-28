@@ -15,6 +15,12 @@ add_executable(
     "${FW_SOURCE_DIR}/main.cpp"
 )
 
+target_include_directories(
+    cli 
+    PRIVATE
+    "${FW_SOURCE_DIR}"
+)
+
 install(
     TARGETS cli
     RUNTIME DESTINATION bin
