@@ -11,8 +11,8 @@
 
 #include <array>
 #include <functional>
+#include <list>
 #include <string>
-#include <unordered_map>
 
 #define _MAXINT 2147483647
 
@@ -156,6 +156,10 @@ public:
                 novo_noh->mods[0] = m;
 
                 avisa_observadores(nova_versao, novo_noh);
+
+                // ToDo: aqui estava permitindo chamar direto a std::list
+                //       de nohs_unificados da abb. Nao deveria. Investigar.
+                _arvore_associada->_registra_noh(novo_noh);
             }
         }
 
@@ -319,7 +323,7 @@ public:
             if (!adicionou)
             {
                 auto novo_noh_raiz = copia_compacta();
-                _arvore->_registra_versao_raiz(nova_versao, novo_noh_raiz);
+                _arvore->_registra_raiz(nova_versao, novo_noh_raiz);
                 novo_noh_raiz->mods[0] = { nova_versao, campo::noh, n };
             }
         }
@@ -335,12 +339,15 @@ public:
 
     abb()
     {
-        _registra_versao_raiz(0, new noh_raiz(this));
+        _registra_raiz(0, new noh_raiz(this));
     }
 
     ~abb()
     {
-        // ToDo: limpeza dos nohs
+        for (noh* noh_corrente : nohs_unificados)
+        {
+            delete noh_corrente;
+        }
     }
 
     size_t ultima_versao() const
@@ -348,29 +355,25 @@ public:
         return _versao;
     }
 
-    bool inclui(int chave)
+    void inclui(int chave)
     {
         const size_t novaVersao = ++_versao;
+
         auto z = new noh(this);
         z->chave(novaVersao, chave);
         inclui(novaVersao, z);
 
-        return true;
+        _registra_noh(z);
     }
 
-    bool remove(int chave)
+    void remove(int chave)
     {
         const size_t novaVersao = ++_versao;
 
-        noh* z = busca(novaVersao, raiz(novaVersao), chave);
-        if (z == nullptr)
+        if (noh* z = busca(novaVersao, raiz(novaVersao), chave))
         {
-            return false;
+            remove(novaVersao, z);
         }
-
-        remove(novaVersao, z);
-
-        return true;
     }
 
     int sucessor(int x, size_t versao) const
@@ -410,7 +413,11 @@ public:
         return str;
     }
 
-    void _registra_versao_raiz(size_t nova_versao, noh_raiz* nova_raiz)
+    void _registra_noh(noh* n)
+    {
+        nohs_unificados.push_back(n);
+    }
+    void _registra_raiz(size_t nova_versao, noh_raiz* nova_raiz)
     {
         raizes_nas_versoes.push_back({ nova_versao, nova_raiz });
     }
@@ -566,6 +573,11 @@ private:
     {
         return get_noh_raiz(versao)->get_noh(versao);
     }
+    void raiz(size_t nova_versao, noh* n)
+    {
+        get_noh_raiz(nova_versao)->set_noh(nova_versao, n);
+    }
+
     noh_raiz* get_noh_raiz(size_t versao) const
     {
         for (auto i = static_cast<int>(raizes_nas_versoes.size()) - 1; i >= 0; i--)
@@ -579,10 +591,6 @@ private:
 
         return nullptr;
     }
-    void raiz(size_t nova_versao, noh* n)
-    {
-        get_noh_raiz(nova_versao)->set_noh(nova_versao, n);
-    }
 
     struct par_versao_raiz
     {
@@ -592,6 +600,7 @@ private:
 
     size_t _versao = 0;
     std::vector<par_versao_raiz> raizes_nas_versoes;
+    std::list<noh*> nohs_unificados;
 };
 
 }
