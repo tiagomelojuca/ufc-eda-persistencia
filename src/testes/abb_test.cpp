@@ -35,6 +35,11 @@ TEST(abb_test, deve_ser_capaz_de_inspecionar_versoes_antigas)
     EXPECT_EQ(arvore.sucessor(6, 1), _MAXINT);
     EXPECT_EQ(arvore.sucessor(7, 1), _MAXINT);
 
+    EXPECT_EQ(arvore.sucessor(2, 2), 5);
+    EXPECT_EQ(arvore.sucessor(5, 2), 6);
+    EXPECT_EQ(arvore.sucessor(6, 2), _MAXINT);
+    EXPECT_EQ(arvore.sucessor(7, 2), _MAXINT);
+
     EXPECT_EQ(arvore.sucessor(2, 10), 5);
     EXPECT_EQ(arvore.sucessor(5, 10), 6);
     EXPECT_EQ(arvore.sucessor(6, 10), 7);
