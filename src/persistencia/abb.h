@@ -240,7 +240,7 @@ public:
             }
         }
 
-        int _chave = 0;
+        int _chave = _MAXINT;
         noh* _pai = nullptr;
         noh* _esq = nullptr;
         noh* _dir = nullptr;
@@ -377,16 +377,15 @@ public:
 
     int sucessor(int x, size_t versao) const
     {
-        noh* n = busca_menor_igual(versao, x);
-        if (n != nullptr)
+        const int menor_chave_arvore = min(versao, raiz(versao))->chave(versao);
+        if (x < menor_chave_arvore)
         {
-            if (x != n->chave(versao))
-            {
-                return n->chave(versao);
-            }
+            return menor_chave_arvore;
+        }
 
-            n = sucessor(versao, n);
-            if (n != nullptr)
+        if (noh* n = busca_menor_igual(versao, x))
+        {
+            if (n = sucessor(versao, n))
             {
                 return n->chave(versao);
             }
