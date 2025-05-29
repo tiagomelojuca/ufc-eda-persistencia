@@ -22,6 +22,11 @@ Note que é necessário um compilador com suporte pelo menos ao standard de 2014
 ## Execução
 O binário `cli` gerado na pasta de instalação do CMake pode ser utilizado com a seguinte sintaxe:  
 `./cli [arquivo_entrada] [arquivo_saida]`  
+ou 
+<br>
+`.\out\cli.exe [arquivo_entrada] [arquivo_saida]`
+<br>
+se estiver usando o PowerShell.
   
 O arquivo de entrada especifica a rotina a ser executada, cujos resultados são impressos no arquivo de saída. O instrumentador ignora linhas em branco, linhas com instruções inválidas e linhas com número de argumentos não condizentes com a especificação (vide `SPEC.md`).
 
