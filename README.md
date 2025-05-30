@@ -22,11 +22,6 @@ Note que é necessário um compilador com suporte pelo menos ao standard de 2014
 ## Execução
 O binário `cli` gerado na pasta de instalação do CMake pode ser utilizado com a seguinte sintaxe:  
 `./cli [arquivo_entrada] [arquivo_saida]`  
-ou 
-<br>
-`.\out\cli.exe [arquivo_entrada] [arquivo_saida]`
-<br>
-se estiver usando o PowerShell.
   
 O arquivo de entrada especifica a rotina a ser executada, cujos resultados são impressos no arquivo de saída. O instrumentador ignora linhas em branco, linhas com instruções inválidas e linhas com número de argumentos não condizentes com a especificação (vide `SPEC.md`).
 
@@ -34,5 +29,26 @@ O arquivo de entrada especifica a rotina a ser executada, cujos resultados são 
 > 
 > Não foi implementada verificação de sobrescrita para arquivos já existentes, então recomenda-se cautela para não inverter a ordem dos argumentos, pois isso geraria a sobrescrita com uma saída potencialmente vazia.
 
+## Estrutura
+O projeto foi dividido em módulos, de forma a separar a implementação da ABB persistente (regra de negócio propriamente dita) dos demais arquivos que não são o objeto de estudo principal (ruído, basicamente). A estrutura de dados fica isolada e agnóstica em relação ao uso. O arquivo `main.cpp` atua como ponto de entrada do programa, apenas redirecionando as responsabilidades ao consumir as classes explicitadas abaixo:  
+  
+### persistencia
+Módulo principal, onde pode ser encontrada a estrutura de dados persistente propriamente dita  
+  
+- `abb.h`: Árvore Binária de Busca persistente com suporte a inclusão, remoção, verificação de sucessor, verificação de profundidade, verificação da última versão criada e visita em ordem dos nós
+
+### io
+Módulo onde ficam as classes e funções relacionadas a e/s  
+  
+- `arg_parser.h`: classe responsável pela validação da entrada do usuário na linha de comando (ex.: a quantidade de argumentos está correta? a extensão dos arquivos é válida? senão, qual o erro?)
+- `file_parser.h`: realiza a leitura do arquivo de entrada fornecido pelo usuário e interpreta as instruções contidas nele, convertendo-as para um formato estruturado (vide `operacao.h`) que serão executadas pelo instrumentador (vide `executor.h`)
+- `file_writer.h`: realiza a escrita em arquivo das operações
+- `operacao.h`: abstração das possíveis instruções e parâmetros que o usuário pode fornecer no arquivo de entrada
+- `executor.h`: instrumenta a execução sequencial das operações lidas do arquivo de entrada
+- `utils.h`: funções de uso geral
+
+### testes
+Módulo onde ficam os testes unitários escritos no framework `googletest` para validar as implementações. Para não ser redundante com a seção acima, é suficiente dizer que o arquivo `foo_test.cpp` se refere aos testes unitários de `foo.h`. Se for de interesse, os arquivos de implementação contém comentários e descrições específicas para cada Test Case.
+
 ## Créditos
-- **gtest:** framework do Google para testes unitários em C++
+- **gtest:** framework do Google para testes unitários em C++ [BSD]
