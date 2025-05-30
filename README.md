@@ -48,7 +48,7 @@ Módulo onde ficam as classes e funções relacionadas a e/s
 - `utils.h`: funções de uso geral
 
 ### testes
-Módulo onde ficam os testes unitários escritos no framework `googletest` para validar as implementações. Para não ser redundante com a seção acima, é suficiente dizer que o arquivo `foo_test.cpp` se refere aos testes unitários da classe `foo.h`. Informações mais específicas podem ser encontradas nos comentários e títulos de cada Test Case, se for de interesse.
+Módulo onde ficam os testes unitários escritos no framework `googletest` para validar as implementações supracitadas. Para não ser redundante em relação à seção acima, é suficiente dizer que o arquivo `foo_test.cpp` se refere aos testes unitários da classe `foo.h`. Informações mais específicas podem ser encontradas nos comentários e títulos de cada Test Case, se for de interesse.
 
 ## Créditos
 - **gtest:** framework do Google para testes unitários em C++ [BSD]
