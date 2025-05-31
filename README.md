@@ -17,7 +17,7 @@ Exemplo com a toolchain do projeto GNU (gcc + make):
 `cmake -S . -B out -G "MinGW Makefiles"`  
 `cmake --build out --target install`  
 
-Note que é necessário um compilador com suporte pelo menos ao standard de 2014 (as versões mais recentes de gcc, clang e msvc funcionam sem problemas). A instalação será gerada em **out/exeobj_cmake**, contendo uma ferramenta para interação cli e uma suíte de testes unitários.
+Note que é necessário um compilador com suporte pelo menos ao standard de 2017 (as versões mais recentes de gcc, clang e msvc funcionam sem problemas). A instalação será gerada em **out/exeobj_cmake**, contendo uma ferramenta para interação cli e uma suíte de testes unitários.
 
 ## Execução
 O binário `cli` gerado na pasta de instalação do CMake pode ser utilizado com a seguinte sintaxe:  
