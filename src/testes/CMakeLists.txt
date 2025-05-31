@@ -1,5 +1,5 @@
-project(TesteUnitario)
 cmake_minimum_required(VERSION 3.24)
+project(TesteUnitario)
 
 # TODO: Investigar por que gera o gtest static por default, levando ao erro abaixo:
 #       gtest.lib(gtest-all.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary':

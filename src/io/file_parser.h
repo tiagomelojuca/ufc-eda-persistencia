@@ -62,13 +62,21 @@ private:
 
         const std::string instrucao = linha.substr(0, 3);
         const std::string params = linha.substr(4);
-        const int espacos = static_cast<int>(std::count(params.begin(), params.end(), ' '));
-        if (espacos > 1)
+
+        int n_espacos = 0;
+        for (char c : params)
+        {
+            if (c == ' ')
+            {
+                n_espacos++;
+            }
+        }
+        if (n_espacos > 1)
         {
             return nullptr;
         }
 
-        if (espacos == 0)
+        if (n_espacos == 0)
         {
             if (instrucao == "INC")
             {
@@ -86,7 +94,7 @@ private:
             }
         }
 
-        if (espacos == 1 && instrucao == "SUC")
+        if (n_espacos == 1 && instrucao == "SUC")
         {
             const auto posEspaco = params.find(' ');
             const std::string lparam = params.substr(0, posEspaco);

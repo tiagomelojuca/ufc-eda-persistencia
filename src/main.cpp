@@ -8,7 +8,7 @@
 #define ERRO_ENTRADA_INVALIDA    1
 #define ERRO_ABERTURA_ARQUIVO    2
 
-namespace StringTableTabajara
+namespace string_table_tabajara
 {
     constexpr static const char* STR_ERRO_NUM_ARGS_INVALIDO = "Numero de argumentos invalido!";
     constexpr static const char* STR_ERRO_ARQUIVO_ENTRADA_INVALIDO = "Nome invalido do arquivo de entrada!";
@@ -22,7 +22,7 @@ namespace StringTableTabajara
 void imprime_erro_na_saida_padrao(const char* str)
 {
     std::cout << "[ERRO] " << str << std::endl;
-    std::cout << "       " << "USO: " << StringTableTabajara::STR_INSTRUCOES << std::endl;
+    std::cout << "       " << "USO: " << string_table_tabajara::STR_INSTRUCOES << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -32,25 +32,25 @@ int main(int argc, char** argv)
 
     if (status != ufc::eda::io::arg_parser::status::SUCESSO)
     {
-        const char* msgErro = "";
+        const char* msg_erro = "";
         if (status == ufc::eda::io::arg_parser::status::NUMERO_DE_ARGUMENTOS_INVALIDO)
         {
-            msgErro = StringTableTabajara::STR_ERRO_NUM_ARGS_INVALIDO;
+            msg_erro = string_table_tabajara::STR_ERRO_NUM_ARGS_INVALIDO;
         }
         else if (status == ufc::eda::io::arg_parser::status::AMBOS_ARQUIVOS_INVALIDOS)
         {
-            msgErro = StringTableTabajara::STR_ERRO_ARQUIVOS_INVALIDOS;
+            msg_erro = string_table_tabajara::STR_ERRO_ARQUIVOS_INVALIDOS;
         }
         else if (status == ufc::eda::io::arg_parser::status::ARQUIVO_ENTRADA_INVALIDO)
         {
-            msgErro = StringTableTabajara::STR_ERRO_ARQUIVO_ENTRADA_INVALIDO;
+            msg_erro = string_table_tabajara::STR_ERRO_ARQUIVO_ENTRADA_INVALIDO;
         }
         else if (status == ufc::eda::io::arg_parser::status::ARQUIVO_SAIDA_INVALIDO)
         {
-            msgErro = StringTableTabajara::STR_ERRO_ARQUIVO_SAIDA_INVALIDO;
+            msg_erro = string_table_tabajara::STR_ERRO_ARQUIVO_SAIDA_INVALIDO;
         }
 
-        imprime_erro_na_saida_padrao(msgErro);
+        imprime_erro_na_saida_padrao(msg_erro);
 
         return ERRO_ENTRADA_INVALIDA;
     }
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     ufc::eda::io::file_parser fparser(arg_parser.arquivo_entrada());
     if (!fparser.parse())
     {
-        imprime_erro_na_saida_padrao(StringTableTabajara::STR_ERRO_ABERTURA_ARQUIVO);
+        imprime_erro_na_saida_padrao(string_table_tabajara::STR_ERRO_ABERTURA_ARQUIVO);
 
         return ERRO_ABERTURA_ARQUIVO;
     }
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     }
     executor.executa();
 
-    std::cout << "[OK] " << StringTableTabajara::STR_ROTINA_EXECUTADA_COM_SUCESSO << std::endl;
+    std::cout << "[OK] " << string_table_tabajara::STR_ROTINA_EXECUTADA_COM_SUCESSO << std::endl;
 
     return SEM_ERRO;
 }
