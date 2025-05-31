@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(TesteUnitario)
+project(unit_test)
 
 # TODO: Investigar por que gera o gtest static por default, levando ao erro abaixo:
 #       gtest.lib(gtest-all.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary':
@@ -17,7 +17,7 @@ add_subdirectory(
 )
 
 add_executable(
-    TesteUnitario
+    unit_test
     "abb_test.cpp"
     "arg_parser_test.cpp"
     "executor_test.cpp"
@@ -25,10 +25,10 @@ add_executable(
     "file_writer_test.cpp"
 )
 
-target_link_libraries(TesteUnitario gtest_main)
-target_include_directories(TesteUnitario PRIVATE ${FW_SOURCE_DIR})
+target_link_libraries(unit_test gtest_main)
+target_include_directories(unit_test PRIVATE ${FW_SOURCE_DIR})
 
 install(
-    TARGETS TesteUnitario
+    TARGETS unit_test
     RUNTIME DESTINATION bin
 )
