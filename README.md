@@ -17,7 +17,7 @@ Exemplo com a toolchain do projeto GNU (gcc + make):
 `cmake -S . -B out -G "MinGW Makefiles"`  
 `cmake --build out --target install`  
 
-Note que é necessário um compilador com suporte pelo menos ao standard de 2017 (as versões mais recentes de gcc, clang e msvc funcionam sem problemas). A instalação será gerada em **out/exeobj_cmake**, contendo uma ferramenta para interação cli e uma suíte de testes unitários.
+Note que é necessário um compilador com suporte pelo menos ao standard de 2017 (as versões mais recentes de gcc, clang e msvc funcionam sem problemas). A instalação será gerada em **out/exeobj_cmake**, contendo uma ferramenta para interação cli e uma suíte de testes unitários. É possível desligar a construção dos testes unitários no momento da geração do projeto por meio da flag `BUILD_UNIT_TESTS`, prevista no arquivo do projeto `CMakeLists.txt`, diminuindo o requisito do compilador para suporte a C++14 ou superior (a necessidade de C++17 é devido ao framework `googletest`).
 
 ## Execução
 O binário `cli` gerado na pasta de instalação do CMake pode ser utilizado com a seguinte sintaxe:  
