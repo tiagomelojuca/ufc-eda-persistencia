@@ -3,7 +3,6 @@ O presente projeto foi desenvolvido para a cadeira de Estrutura de Dados Avança
 
 ## Equipe
 - Tiago Melo Jucá
-- Rafael de Paiva Lima Filho
 - Lucas Cabral Amador Mourao
 
 ## Build
